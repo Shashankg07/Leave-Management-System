@@ -1,0 +1,69 @@
+syntax = "proto3";
+package leaveManagement;
+option go_package = "/pb";
+
+message ApplyLeaveRequest{
+    string employeeId=1;
+    string leaveTypeId=2;
+    string fromDate=3;
+    string toDate=4;
+    string comment=5;
+}
+message ApplyLeaveResponse{
+}
+message ChangeLeaveStatusRequest{
+    string employeeId=1;
+    string applicationId=2; 
+    string leaveStatus=3;
+}
+message ChangeLeaveStatusResponse{
+}
+message GetLeaveByIdRequest{
+    string applicationId=1;
+}
+message GetLeaveByIdResponse{
+    string applicationId=1;
+    string employeeId=2;
+    string leaveTypeId=3;
+    string dateOfApplication=4;
+    string fromDate=5;
+    string toDate=6;
+    string noOfDays=7;
+    string leaveBalance=8;
+    string leaveStatus=9;
+    string comment=10;
+    string dateOfApproval=11;
+    string firstName=12;
+    string lastName=13;
+}
+message LeavesListRequest{
+    string employeeId=1;
+    string leaveStatus=2;
+}
+message LeavesListResponse{
+    repeated GetLeaveByIdResponse leavesListResponse=1;
+}
+message DeleteLeaveRequest{
+    string employeeId=1;
+    string applicationId=2;
+}
+message DeleteLeaveResponse{ 
+}
+message UpdateLeaveRequest{
+    string applicationId=1;
+    string employeeId=2;
+    string leaveTypeId=3;
+    string fromDate=4;
+    string toDate=5;
+    string comment=6;
+}
+message UpdateLeaveResponse{
+}
+service leaveManagementSerivce{
+    rpc ApplyLeave(ApplyLeaveRequest) returns (ApplyLeaveResponse){};
+    rpc ChangeLeaveStatus(ChangeLeaveStatusRequest) returns (ChangeLeaveStatusResponse){};
+    rpc LeavesList(LeavesListRequest) returns (LeavesListResponse){};   
+    rpc GetLeaveById(GetLeaveByIdRequest) returns (GetLeaveByIdResponse){};
+    rpc DeleteLeave(DeleteLeaveRequest) returns (DeleteLeaveResponse){};
+    rpc UpdateLeave(UpdateLeaveRequest) returns (UpdateLeaveResponse){};
+}

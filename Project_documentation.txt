@@ -1,0 +1,161 @@
+=========================================Project Description=======================================
+This Project is based on LEAVE MANAGEMENT SYSTEM. A leave management system is a platform that 
+enables a company to easily and correctly allocate, track and grant leave as well as allow for 
+employees to request and track their own leave.
+
+=========================================Project Requirement=======================================
+1.) Create API for CRUD operations for Adding/Viewing/ Updating/ Deleting leave.
+2.) Create Manager, Employee and Admin role in the application to access the functionalities as per
+    corresponding role.
+        > Admin will have all the access.
+        > Manager can approve and reject the leave.
+        > Employee can view and apply the leave.
+
+=========================================Tools and Methods=========================================
+- This project is completely created on GO lang.
+- VS code to write and test all my code.
+- Xampp to establish connection with MySQL database.
+- All the database is configured using phpmyadmin.
+- Protoc command to generate all the protobufs.
+
+=========================================Project Structure=========================================
+|--lm-db-service
+    |-cmd
+        |-lm-db-services-server
+            |-services
+                |-leave-management.go
+            |-main.go
+    |-internal
+        |-storage
+            |-database
+                |-database.go
+                |-database_test.go
+            |-validation
+                |-validation.go
+    |-models
+        |-models.go
+    |-pkg
+        |-pb
+            |-lm_grpc.pb.go
+            |-lm.pb.go
+|--lm-router
+|--pb
+    |-lm.proto
+============================================APIs created============================================
+1.)ApplyLeave(this is used to apply for leave)
+
+    |-ApplyLeaveRequest
+        |-employee id
+        |-leave type id
+        |-from_date
+        |-to_date
+        |-comment
+    |-ApplyLeaveResponse
+        |-nothing
+
+2.)ChangeLeaveStatus(this is used to approve or reject leave, only manager has the access to it)
+
+    |-ChangeLeaveStatusRequest
+        |-employee id
+        |-application id
+        |-leave status
+    |-ChangeLeaveStatusResponse
+        |-nothing
+
+3.)LeavesList(this is used to view all leaves, only manager and HR have access to it)
+             (leave can also be viewed according to there status via this API)
+    |-LeavesListRequest 
+        |-employee id
+        |-leave status
+    |-LeavesListResponse
+        |-application id 
+        |-employee id
+        |-leave type id
+        |-date of application
+        |-from date
+        |-to date
+        |-no of days
+        |-leave balance
+        |-leave status
+        |-comment
+        |-date of approval
+        |-first name
+        |-last name
+
+4.)LeaveList(this is used to view leave of an particular leave apllication ID)
+    |-LeaveListRequest
+        |-application id
+    |-LeaveListRepsonse
+        |-application id
+        |-employee id
+        |-leave type id
+        |-date of application
+        |-from date
+        |-to date
+        |-no of days
+        |-leave balance
+        |-leave status
+        |-comment
+        |-date of approval
+        |-first name
+        |-last name
+
+5.) DeleteLeave(this API is used to delete an leave only HR has access to it)
+    |-DeleteLeaveRequest
+        |-employee id
+        |-application id
+    |-DeleteLeaveResponse
+        |-nothing
+
+6.) UpdateLeave(this is used to do any updation in the leave)
+    |-UpdateLeaveRequest
+        |-application id
+        |-employee id
+        |-leave type id
+        |-from date
+        |-to date
+        |-comment
+    |-UpdateLeaveResponse
+        |-nothing
+===========================================Database Used===========================================
+leave_management(MySQL)
+
+===================tablesUsed===================
+1.)lm_designation
+	#	Name	                Type		    
+	1	leave_type_id (Primary)	int(11)			
+	2	leave_name	            varchar(30)		
+	3	number_days_allowed	    int(3)
+
+2.)lm_employee
+    #	Name	                Type	        Comments	
+	1	employee_id (Primary)	int(11)							
+	2	last_name	            varchar(30)	    			
+	3	first_name	            varchar(30)	    			
+	4	age	                    int(3)						
+	5	gender	                int(1)			0=male, 1=female	
+	6	email_address	        varchar(50)	    			
+	7	contact_number	        varchar(15)	    			
+	8	designation_id	        int(11)						
+	9	username	            varchar(30)	    			
+	10	account_status	        int(1)			0=inactive, 1=active	
+
+3.)lm_leave_application
+    #	Name	                    Type	        Comments
+	1	application_id (Primary)	int(11)			
+	2	employee_id	                int(11)					
+	3	leave_type_id	            int(11)				
+	4	date_of_application	        datetime
+    5	from_date	                date
+	6	to_date	                    date			
+	7	no_of_days	                int(11)
+    8   leave_balance               int(2)
+	8	leave_status	            int(11)			0 for pending, 1 for approve, and 2 for rejected
+	9	comment	                    varchar(100)		
+	10	date_of_approval	        datetime	
+
+4.)lm_leave_type
+    #	Name	                Type	
+    1	leave_type_id (Primary)	int(11)
+	2	leave_name	            varchar(30)	
+	3	number_days_allowed	    int(3)
